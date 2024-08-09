@@ -1,0 +1,9 @@
+.table-container {
+    overflow-x: auto;
+  }
+  
+  .p-datatable-sm {
+    width: 100%;
+    min-width: 800px; /* Ajusta esto según sea necesario */
+  }
+  
