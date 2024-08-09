@@ -49,9 +49,9 @@ const Search = () => {
   };
 
   const regimenOptions = [
-    { label: "Contributivo", value: "Contributivo" },
-    { label: "Subsidiado", value: "Subsidiado" },
-    { label: "PAC", value: "PAC" },
+    { label: "Contributivo", value: 1 },
+    { label: "Subsidiado", value: 2 },
+    { label: "PAC", value: 3 },
   ];
 
   const regionalOptions = locationData.regions?.map(region => ({ label: region, value: region })) || [];

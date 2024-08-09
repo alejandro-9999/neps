@@ -39,7 +39,7 @@ window.initPage = (basePath) => {
         element: <Navigate to="/login" replace />,
       }
     ],
-    { basename: '/auditoria-medica/' },
+    { basename: baseApi },
   );
 
   ReactDOM.createRoot(document.getElementById('root')).render(
