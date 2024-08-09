@@ -6,7 +6,7 @@
     -->
     <modelVersion>4.0.0</modelVersion>
     <groupId>it.megadix</groupId>
-    <artifactId>my-app</artifactId>
+    <artifactId>auditoria-medica</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 

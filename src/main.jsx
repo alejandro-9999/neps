@@ -39,7 +39,7 @@ window.initPage = (basePath) => {
         element: <Navigate to="/login" replace />,
       }
     ],
-    { basename: baseApi },
+    { basename: '/auditoria-medica' },
   );
 
   ReactDOM.createRoot(document.getElementById('root')).render(
@@ -53,7 +53,5 @@ window.initPage = (basePath) => {
   );
 };
 
-
-console.log("hola beba");
 
 window.initPage('/');

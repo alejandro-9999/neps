@@ -43,7 +43,6 @@ const AccountsTable = ({ tableData, query }) => {
     setRows(event.rows);
 
     setFirst(event.page * event.rows + 1);
-
   };
 
   const fileFormats = [
@@ -51,7 +50,6 @@ const AccountsTable = ({ tableData, query }) => {
     { label: 'Excel', value: 'xlsx' },
     { label: 'Text', value: 'txt' },
   ];
-
 
   const validRows = [
     { label: '5', value: '5' },
@@ -107,24 +105,15 @@ const AccountsTable = ({ tableData, query }) => {
     </div>
   );
 
-
-  
-
-
-
   const showPayments = async (row) => {
-
-
     const { numeroFactura, nitIps } = row;
-
-    console.log(numeroFactura, nitIps);
 
     try {
       const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}${import.meta.env.VITE_REACT_APP_API_PAYMENTS_ENDPOINT}`, {
         params: {
           numeroFactura,
-          nitIps
-        }
+          nitIps,
+        },
       });
       setSelectedPayments(response.data);
       setModalVisible(true);
@@ -151,22 +140,23 @@ const AccountsTable = ({ tableData, query }) => {
     <div>
       <Button type='button' label='Dashboard' onClick={() => toggleReport(true)} />
       <Divider />
-      <DataTable
-        value={data}
-        paginator
-        lazy
-        first={first}
-        loading={accounts.loading}
-        rows={rows} // Tamaño de la página
-        rowsPerPageOptions={[5, 10, 25, 50, 100]}
-        totalRecords={totalRecords}
-        size={'small'}
-        onPage={onPage}
-        paginatorRight={paginatorRight}
-        className='p-datatable-gridlines'
-        emptyMessage='No data found'
-      >
-        <Column field='nitIps' header='NIT IPS' sortable></Column>
+      <div className='table-container'>
+        <DataTable
+          value={data}
+          paginator
+          lazy
+          first={first}
+          loading={accounts.loading}
+          rows={rows} // Tamaño de la página
+          rowsPerPageOptions={[5, 10, 25, 50, 100]}
+          totalRecords={totalRecords}
+          size={'small'}
+          onPage={onPage}
+          paginatorRight={paginatorRight}
+          className='p-datatable-gridlines'
+          emptyMessage='No data found'
+        >
+          <Column field='nitIps' header='NIT IPS' sortable></Column>
           <Column field='ips' header='Nombre IPS' sortable></Column>
           <Column field='regional' header='Regional' sortable></Column>
           <Column field='zonal' header='Zonal' sortable></Column>
@@ -189,8 +179,9 @@ const AccountsTable = ({ tableData, query }) => {
           <Column field='condicionAlta' header='Condición de alta' sortable></Column>
           <Column field='cohorte' header='Cohorte' sortable></Column>
           <Column field='fechaEgreso' header='Fecha de egreso' sortable></Column>
-          <Column body={paymentsTemplate} header="Pagos"></Column>
-      </DataTable>
+          <Column body={paymentsTemplate} header='Pagos'></Column>
+        </DataTable>
+      </div>
       <Dialog header='Payments' visible={modalVisible} onHide={() => setModalVisible(false)} maximizable>
         <PaymentsTable paymentsData={selectedPayments} />
       </Dialog>

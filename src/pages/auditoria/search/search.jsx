@@ -10,7 +10,8 @@ import { fetchData } from "../../../redux/actions/accountsActions";
 import { Dropdown } from "primereact/dropdown";
 
 const Search = () => {
-  const [dates, setDates] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [idAfiliado, setIdAfiliado] = useState(null);
   const [regional, setRegional] = useState("");
   const [nit, setNit] = useState(null);
@@ -19,30 +20,28 @@ const Search = () => {
   const [submitted, setSubmitted] = useState(false);
   const [locationData, setLocationData] = useState({});
 
-
   const accounts = useSelector((state) => state.accounts);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     setLocationData(accounts.location_data);
-  },[accounts.location_data]);
+  }, [accounts.location_data]);
 
   const dispatch = useDispatch();
 
   const search = () => {
     setSubmitted(true);
 
-    if (dates) {
+    if (startDate && endDate) {
       const searchObject = {
-        fechaInicio: dates[0].toISOString().split('T')[0],
-        fechaFin: dates[1].toISOString().split('T')[0],
+        fechaInicio: startDate.toISOString().split("T")[0],
+        fechaFin: endDate.toISOString().split("T")[0],
         numeroAfiliado: idAfiliado ? idAfiliado.toString() : "",
         regional: regional.trim(),
-        regimen:regimen,
+        regimen: regimen,
         nitIps: nit ? nit.toString() : "",
         zonal: zonal.trim(),
-        page: 1,  // Inicialmente establecemos la página en 1
-        size: 25  // Puedes ajustar el tamaño de la página según tus necesidades
+        page: 1, // Inicialmente establecemos la página en 1
+        size: 25, // Puedes ajustar el tamaño de la página según tus necesidades
       };
       dispatch(fetchData(searchObject));
     }
@@ -54,25 +53,64 @@ const Search = () => {
     { label: "PAC", value: 3 },
   ];
 
-  const regionalOptions = locationData.regions?.map(region => ({ label: region, value: region })) || [];
-  const zonalOptions = locationData.zones?.map(zone => ({ label: zone, value: zone })) || [];
+  const regionalOptions =
+    locationData.regions?.map((region) => ({ label: region, value: region })) ||
+    [];
+  const zonalOptions =
+    locationData.zones?.map((zone) => ({ label: zone, value: zone })) || [];
+
+  const handleStartDateChange = (e) => {
+    const selectedDate = e.value;
+    setStartDate(selectedDate);
+    setEndDate(null); // Reinicia la fecha de fin cuando cambia la de inicio
+  };
+
+  const handleEndDateChange = (e) => {
+    const selectedDate = e.value;
+    const maxEndDate = new Date(startDate);
+    maxEndDate.setDate(maxEndDate.getDate() + 8);
+
+    if (selectedDate > maxEndDate) {
+      // Si la fecha seleccionada excede el rango de 8 días, establece la fecha máxima permitida
+      setEndDate(maxEndDate);
+    } else {
+      setEndDate(selectedDate);
+    }
+  };
 
   return (
     <div className="formgrid grid">
-      <div className="col-12">
-        <label htmlFor="date">Periodo*</label>
+      <div className="col-12 md:col-6">
+        <label htmlFor="start_date">Fecha de Inicio*</label>
         <Calendar
-          id="date"
+          id="start_date"
           className={classNames("w-full p-inputtext-sm mb-1", {
-            "p-invalid": submitted && !dates,
+            "p-invalid": submitted && !startDate,
           })}
-          value={dates}
-          onChange={(e) => setDates(e.value)}
-          selectionMode="range"
+          value={startDate}
+          onChange={handleStartDateChange}
           readOnlyInput
-          hideOnRangeSelection
         />
-        {submitted && !dates && <small className="p-error">Periodo es requerido.</small>}
+        {submitted && !startDate && (
+          <small className="p-error">Fecha de inicio es requerida.</small>
+        )}
+      </div>
+      <div className="col-12 md:col-6">
+        <label htmlFor="end_date">Fecha de Fin*</label>
+        <Calendar
+          id="end_date"
+          className={classNames("w-full p-inputtext-sm mb-1", {
+            "p-invalid": submitted && !endDate,
+          })}
+          value={endDate}
+          onChange={handleEndDateChange}
+          readOnlyInput
+          minDate={startDate}
+          maxDate={startDate ? new Date(new Date(startDate).setDate(new Date(startDate).getDate() + 8)) : null}
+        />
+        {submitted && !endDate && (
+          <small className="p-error">Fecha de fin es requerida.</small>
+        )}
       </div>
       <div className="col-12 md:col-6">
         <label htmlFor="id_afiliado">Número Identificación Afiliado</label>

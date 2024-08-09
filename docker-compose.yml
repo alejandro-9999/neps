@@ -4,4 +4,4 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./auditoria-medica.war:/opt/jboss/wildfly/standalone/deployments/auditoria-medica.war
+      - ./target/auditoria-medica.war:/opt/jboss/wildfly/standalone/deployments/auditoria-medica.war
