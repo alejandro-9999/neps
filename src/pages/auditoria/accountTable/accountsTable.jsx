@@ -15,8 +15,9 @@ import './accountsTable.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchData } from '../../../redux/actions/accountsActions';
 
-const AccountsTable = ({ tableData, query }) => {
+const AccountsTable = ({ tableData,reportAuditObject, query }) => {
   const [data, setData] = useState([]);
+  const [reportAuditData, serReportAuditData] = useState([]);
   const [fileFormat, setFileFormat] = useState('csv');
   const [rows, setRows] = useState(25);
   const [selectedPayments, setSelectedPayments] = useState([]);
@@ -32,6 +33,10 @@ const AccountsTable = ({ tableData, query }) => {
     setTotalRecords(tableData.cantidadRegistros);
     setData(tableData.amconcurrencias);
   }, [tableData]);
+
+  useEffect(()=>{
+    serReportAuditData(reportAuditObject.amconcurrencias);
+  },[reportAuditObject])
 
   const onPage = (event) => {
     var new_query = {...accounts.query};
@@ -186,7 +191,7 @@ const AccountsTable = ({ tableData, query }) => {
         <PaymentsTable paymentsData={selectedPayments} />
       </Dialog>
       <Dialog header='Report Audit' visible={reportVisible} onHide={() => setReportVisible(false)} maximizable>
-        <ReportAudit reportData={data}/>
+        <ReportAudit reportData={reportAuditData}/>
       </Dialog>
     </div>
   );

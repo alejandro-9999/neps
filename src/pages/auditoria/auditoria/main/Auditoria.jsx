@@ -12,6 +12,7 @@ const Auditoria = () => {
   const accounts = useSelector((state) => state.accounts);
   const [loading, setLoading] = useState();
   const [data, setData] = useState([]);
+  const [reportAudit, setReportAudit] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -26,7 +27,8 @@ const Auditoria = () => {
 
   useEffect(() => {
     setData(accounts.data != null ? accounts.data : [])
-  }, [accounts.data]);
+    setReportAudit(accounts.report_audit != null ? accounts.report_audit : [])
+  }, [accounts.data,accounts.report_audit]);
 
   return (
     <div className="responsive-container">
@@ -39,7 +41,7 @@ const Auditoria = () => {
         <Search />
         <div className="mt-4">
         <div style={{'display':data != [] > 0  ? 'block' : 'none'}}>
-          <AccountsTable tableData={data} />
+          <AccountsTable tableData={data} reportAuditObject={reportAudit}/>
         </div>
       </div>
       </Fieldset>

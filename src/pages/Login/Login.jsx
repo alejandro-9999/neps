@@ -72,11 +72,11 @@ const Login = () => {
                     </div>
                     <div className='user-type'>
                         <div className="p-field-radiobutton">
-                            <RadioButton inputId="externo" name="userType" value="Externo" onChange={(e) => setUserType(e.value)} checked={userType === 'externo'} />
+                            <RadioButton inputId="externo" name="userType" value="Externo" onChange={(e) => setUserType(e.value)} checked={userType === 'Externo'} />
                             <label htmlFor="externo">Externo</label>
                         </div>
                         <div className="p-field-radiobutton">
-                            <RadioButton inputId="interno" name="userType" value="Interno" onChange={(e) => setUserType(e.value)} checked={userType === 'interno'} />
+                            <RadioButton inputId="interno" name="userType" value="Interno" onChange={(e) => setUserType(e.value)} checked={userType === 'Interno'} />
                             <label htmlFor="interno">Interno</label>
                         </div>
                     </div>

@@ -19,10 +19,7 @@ const sessionMiddleware = store => next => action => {
         localStorage.removeItem('expiryTime');
         next(fetchUserFailure('Session expired'));
         window.location.href = 'login'; // Redireccionar a login
-    }else{
-        window.location.href = 'auditoria';
     }
-
     return next(action);
 };
 

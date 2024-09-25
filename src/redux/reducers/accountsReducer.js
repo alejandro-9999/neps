@@ -5,6 +5,7 @@ const accountsSlice = createSlice({
     name: 'accounts',
     initialState:{
         data: null,
+        report_audit:null,
         loading:false,
         query:false,
         location_data:[],
@@ -19,6 +20,7 @@ const accountsSlice = createSlice({
             state.loading = false;
             state.data = action.payload.data;
             state.query = action.payload.query;
+            state.report_audit = action.payload.report_audit;
         },
         fetchDataFailure: (state, action) => {
             state.loading = false;

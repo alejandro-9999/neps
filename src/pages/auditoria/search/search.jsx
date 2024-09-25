@@ -8,6 +8,7 @@ import { classNames } from "primereact/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchData } from "../../../redux/actions/accountsActions";
 import { Dropdown } from "primereact/dropdown";
+import { useNavigate } from "react-router-dom"; // Importa useNavigate
 
 const Search = () => {
   const [startDate, setStartDate] = useState(null);
@@ -27,6 +28,7 @@ const Search = () => {
   }, [accounts.location_data]);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Inicializa useNavigate
 
   const search = () => {
     setSubmitted(true);
@@ -47,17 +49,26 @@ const Search = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("user"); // Elimina el objeto 'user' del localStorage
+    window.location.href = 'login'; // Redirige a la página de login
+  };
+
   const regimenOptions = [
     { label: "Contributivo", value: 1 },
     { label: "Subsidiado", value: 2 },
     { label: "PAC", value: 3 },
   ];
 
-  const regionalOptions =
-    locationData.regions?.map((region) => ({ label: region, value: region })) ||
-    [];
-  const zonalOptions =
-    locationData.zones?.map((zone) => ({ label: zone, value: zone })) || [];
+  const regionalOptions = [
+    { label: "No seleccionar", value: "" },  // Opción para no seleccionar nada
+    ...(locationData.regions?.map((region) => ({ label: region, value: region })) || [])
+  ];
+  
+  const zonalOptions = [
+    { label: "No seleccionar", value: "" },  // Opción para no seleccionar nada
+    ...(locationData.zones?.map((zone) => ({ label: zone, value: zone })) || [])
+  ];
 
   const handleStartDateChange = (e) => {
     const selectedDate = e.value;
@@ -76,6 +87,17 @@ const Search = () => {
     } else {
       setEndDate(selectedDate);
     }
+  };
+
+  const clearForm = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setIdAfiliado(null);
+    setRegional("");
+    setNit(null);
+    setZonal("");
+    setRegimen(null);
+    setSubmitted(false);
   };
 
   return (
@@ -106,7 +128,11 @@ const Search = () => {
           onChange={handleEndDateChange}
           readOnlyInput
           minDate={startDate}
-          maxDate={startDate ? new Date(new Date(startDate).setDate(new Date(startDate).getDate() + 8)) : null}
+          maxDate={
+            startDate
+              ? new Date(new Date(startDate).setDate(new Date(startDate).getDate() + 8))
+              : null
+          }
         />
         {submitted && !endDate && (
           <small className="p-error">Fecha de fin es requerida.</small>
@@ -169,6 +195,19 @@ const Search = () => {
       </div>
       <Divider align="right">
         <Button label="Buscar" icon="pi pi-search" onClick={search} />
+        <Button
+          label="Limpiar"
+          icon="pi pi-times"
+          className="p-button-secondary ml-2"
+          onClick={clearForm}
+        />
+        <Button
+          label="Cerrar Sesión"
+          icon="pi pi-sign-out"
+          className="p-button-secondary ml-2"
+          onClick={handleLogout}
+        />
+       
       </Divider>
     </div>
   );
