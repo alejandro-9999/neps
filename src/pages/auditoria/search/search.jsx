@@ -19,7 +19,8 @@ const Search = () => {
   const [zonal, setZonal] = useState("");
   const [regimen, setRegimen] = useState(null);
   const [submitted, setSubmitted] = useState(false);
-  const [locationData, setLocationData] = useState({});
+  const [locationData, setLocationData] = useState([]);
+  const [zonalOptions, setZonalOptions] = useState([]);
 
   const accounts = useSelector((state) => state.accounts);
 
@@ -62,13 +63,15 @@ const Search = () => {
 
   const regionalOptions = [
     { label: "No seleccionar", value: "" },  // Opción para no seleccionar nada
-    ...(locationData.regions?.map((region) => ({ label: region, value: region })) || [])
+    ...(locationData.map((region) => ({ label: region.nombre, value: region.nombre })) || [])
   ];
-  
-  const zonalOptions = [
-    { label: "No seleccionar", value: "" },  // Opción para no seleccionar nada
-    ...(locationData.zones?.map((zone) => ({ label: zone, value: zone })) || [])
-  ];
+
+  const handleRegionalChange = (e) => {
+    setRegional(e.value);
+    const selectedRegion = locationData.find(region => region.nombre === e.value);
+    setZonalOptions(selectedRegion ? selectedRegion.zonas.map(zone => ({ label: zone.nombre, value: zone.nombre })) : []);
+    setZonal(""); // Reiniciar zonal cuando cambie la regional
+  };
 
   const handleStartDateChange = (e) => {
     const selectedDate = e.value;
@@ -156,7 +159,7 @@ const Search = () => {
           className="w-full p-inputtext-sm mb-1"
           value={regional}
           options={regionalOptions}
-          onChange={(e) => setRegional(e.value)}
+          onChange={handleRegionalChange}
           placeholder="Selecciona una regional"
         />
       </div>
@@ -207,7 +210,6 @@ const Search = () => {
           className="p-button-secondary ml-2"
           onClick={handleLogout}
         />
-       
       </Divider>
     </div>
   );
