@@ -1,7 +1,0 @@
-services:
-  jboss:
-    image: jboss/wildfly
-    ports:
-      - 8080:8080
-    volumes:
-      - ./target/auditoria-medica.war:/opt/jboss/wildfly/standalone/deployments/auditoria-medica.war
